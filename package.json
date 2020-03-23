@@ -1,0 +1,37 @@
+{
+  "name": "powershell",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aksm-ms/powershell.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aksm-ms/powershell/issues"
+  },
+  "homepage": "https://github.com/aksm-ms/powershell#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.2",
+    "@actions/exec": "^1.0.3",
+    "@actions/io": "^1.0.2",
+    "@types/node": "^13.7.7",
+    "fs": "0.0.1-security",
+    "os": "^0.1.1",
+    "path": "^0.12.7",
+    "stream": "0.0.2",
+    "tsc": "^1.20150623.0",
+    "typescript": "^3.8.3",
+    "uuid": "^7.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^13.7.7"
+  }
+}
