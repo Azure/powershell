@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Run a one-line script
-    - uses: aksm-ms/powershell@master
+      uses: aksm-ms/powershell@master
       with: 
         inlineScript: "echo foo"
         azPSVersion: "latest"
