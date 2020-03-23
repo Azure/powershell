@@ -1,0 +1,16 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+on:
+  push:
+    branches: [ master ]
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run a one-line script
+      uses: aksm-ms/powershell@master
+      with: 
+        inlineScript: "echo foo"
+        azPSVersion: "latest"
