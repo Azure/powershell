@@ -3,9 +3,6 @@ import * as core from '@actions/core';
 import FileUtils from "./Utilities/FileUtils";
 import PowerShellToolRunner from "./Utilities/PowerShellToolRunner";
 import ScriptBuilder from './Utilities/ScriptBuilder';
-import Constants from "./Constants";
-import { fail } from 'assert';
-import { exec } from 'child_process';
 
 export default class ScriptRunner {
     inlineScript: string;
@@ -33,6 +30,7 @@ export default class ScriptRunner {
         };
         const filePath: string = await FileUtils.createScriptFile(new ScriptBuilder()
                             .getInlineScriptFile(this.inlineScript, this.errorActionPreference));
+        core.debug(`script file to run: ${filePath}`);
         await PowerShellToolRunner.init();
         const exitCode: number = await PowerShellToolRunner.executePowerShellScriptBlock(filePath, options);
         if (exitCode !== 0) {
