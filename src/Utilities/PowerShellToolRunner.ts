@@ -14,10 +14,6 @@ export default class PowerShellToolRunner {
         await exec.exec(`${PowerShellToolRunner.psPath} -Command ${command}`, [], options);
     }
 
-    static async executePowerShellFile(filePath: string, options: any = {}) {
-        await exec.exec(`${PowerShellToolRunner.psPath} -File ${filePath}`, [], options);
-    }
-    
     static async executePowerShellScriptBlock(scriptBlock: string, options: any = {}): Promise<number> {
         const exitCode: number = await exec.exec(`${PowerShellToolRunner.psPath} -Command`, [scriptBlock], options)
         return exitCode;

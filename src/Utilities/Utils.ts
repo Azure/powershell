@@ -5,6 +5,12 @@ import PowerShellToolRunner from '../Utilities/PowerShellToolRunner';
 import ScriptBuilder from './ScriptBuilder';
 
 export default class Utils {
+    /**
+     * Add the folder path where Az modules are present to PSModulePath based on runner
+     * @param azPSVersion
+     * If azPSVersion is empty, folder path in which all Az modules are present are set
+     * If azPSVersion is not empty, folder path of exact Az module version is set
+     */
     static setPSModulePath(azPSVersion: string = "") {
         let modulePath: string = "";
         const runner: string = process.env.RUNNER_OS || os.type();
@@ -67,8 +73,8 @@ export default class Utils {
         if (!(Constants.Success in outputJson)) {
             throw new Error(outputJson[Constants.Error]);
         }
-        const doesVersionExist: boolean = outputJson[Constants.doesVersionExist].toLowerCase() === "true";
-        if(!(doesVersionExist)) {
+        const versionExists: boolean = outputJson[Constants.versionExists].toLowerCase() === "true";
+        if(!(versionExists)) {
             throw new Error("Invalid azPSVersion. Refer https://aka.ms/azure-powershell-release-notes for supported versions.");
         }
     }

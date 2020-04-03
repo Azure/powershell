@@ -14,7 +14,7 @@ export default class FileUtils {
         return filePath;
     }
 
-    static getFileName(): string {
+    private static getFileName(): string {
         return `${uuidv4()}.ps1`;
     }
 

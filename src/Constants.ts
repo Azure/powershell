@@ -7,5 +7,5 @@ export default class Constants {
     static readonly Success: string = "Success";
     static readonly Error: string = "Error";
     static readonly AzVersion: string = "AzVersion";
-    static readonly doesVersionExist: string = "doesVersionExist";
+    static readonly versionExists: string = "versionExists";
 }

@@ -9,7 +9,7 @@ export default class InitializeAzure {
         if (azPSVersion === "latest") {
             azPSVersion = await Utils.getLatestModule(Constants.moduleName);
         } else {
-            Utils.checkModuleVersion(Constants.moduleName, azPSVersion);
+            await Utils.checkModuleVersion(Constants.moduleName, azPSVersion);
         }
         core.debug(`Az Module version used: ${azPSVersion}`);
         Utils.setPSModulePath(`${Constants.prefix}${azPSVersion}`);

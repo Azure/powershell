@@ -31,7 +31,7 @@ export default class ScriptBuilder {
             $WarningPreference = "SilentlyContinue"
             $output = @{}
             $data = ${command}
-            $output['${Constants.doesVersionExist}'] = [string]::IsNullOrEmpty($data)
+            $output['${Constants.versionExists}'] = [string]::IsNullOrEmpty($data)
             $output['${Constants.Success}'] = "true"
         }
         catch {
