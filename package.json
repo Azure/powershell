@@ -9,10 +9,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aksm-ms/powershell.git"
+    "url": "https://github.com/Azure/powershell.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Akshaya",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/aksm-ms/powershell/issues"
@@ -31,7 +31,6 @@
   },
   "devDependencies": {
     "@types/node": "^13.7.7",
-    "tsc": "^1.20150623.0",
     "typescript": "^3.8.3"
   }
 }
