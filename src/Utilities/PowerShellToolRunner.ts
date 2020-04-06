@@ -3,7 +3,6 @@ import * as exec from '@actions/exec';
 
 export default class PowerShellToolRunner {
     static psPath: string;
-    static args: string[] = ['-NoLogo', '-NoProfile', '-NonInteractive'];
 
     static async init() {
         if(!PowerShellToolRunner.psPath) {
@@ -12,13 +11,12 @@ export default class PowerShellToolRunner {
     }
 
     static async executePowerShellCommand(command: string, options: any = {}) {
-        await exec.exec(`${PowerShellToolRunner.psPath} -Command ${command}`, PowerShellToolRunner.args, options);
+        await exec.exec(`${PowerShellToolRunner.psPath} -NoLogo -NoProfile -NonInteractive -Command ${command}`, [], options);
     }
 
     static async executePowerShellScriptBlock(scriptBlock: string, options: any = {}): Promise<number> {
-        PowerShellToolRunner.args.push(scriptBlock);
-        const exitCode: number = await exec.exec(`${PowerShellToolRunner.psPath} -Command`,
-                     PowerShellToolRunner.args, options);
+        const exitCode: number = await exec.exec(`${PowerShellToolRunner.psPath} -NoLogo -NoProfile -NonInteractive -Command`,
+                     [scriptBlock], options);
         return exitCode;
     }
 }
