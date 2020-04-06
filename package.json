@@ -15,9 +15,9 @@
   "author": "Akshaya",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/aksm-ms/powershell/issues"
+    "url": "https://github.com/Azure/powershell/issues"
   },
-  "homepage": "https://github.com/aksm-ms/powershell#readme",
+  "homepage": "https://github.com/Azure/powershell#readme",
   "dependencies": {
     "@actions/core": "^1.2.2",
     "@actions/exec": "^1.0.3",
