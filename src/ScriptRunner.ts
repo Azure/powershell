@@ -17,15 +17,9 @@ export default class ScriptRunner {
     }
 
     async executeFile() {
-        let output: string = "";
         const error: string[] = [];
         const options: any = {
-            outStream: process.stdout,
-            errStream: process.stderr,
             listeners: {
-                stdout: (data: Buffer) => {
-                    output += data.toString();
-                },
                 stderr: (data: Buffer) => {
                     if (error.length < 10) {
                         // Truncate to at most 1000 bytes

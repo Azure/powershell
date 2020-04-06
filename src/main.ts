@@ -12,7 +12,6 @@ async function main() {
         azPSVersion = core.getInput('azPSVersion', { required: true }).trim().toLowerCase();
         const errorActionPreference: string = core.getInput('errorActionPreference');
         const failOnStandardError = core.getInput('failOnStandardError').trim().toLowerCase() === "true";
-        console.log(`errorActionPref: ${errorActionPreference}`);
         console.log(`Validating inputs`);
         validateInputs(inlineScript, azPSVersion, errorActionPreference);
 
