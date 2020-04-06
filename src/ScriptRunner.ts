@@ -32,9 +32,9 @@ export default class ScriptRunner {
         const exitCode: number = await PowerShellToolRunner.executePowerShellScriptBlock(ScriptRunner.filePath, options);
         if (exitCode !== 0) {
             core.setOutput(`Azure PowerShell exited with code:`, exitCode.toString());
-        }
-        if (this.failOnStandardErr) {
-            throw new Error(`Standard error stream contains one or more lines`);
+            if (this.failOnStandardErr) {
+                throw new Error(`Standard error stream contains one or more lines`);
+            }
         }
     }
 }
