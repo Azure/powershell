@@ -5,12 +5,14 @@ import ScriptRunner from './ScriptRunner';
 import InitializeAzure from './InitializeAzure';
 
 const errorActionPrefValues = new Set(['STOP', 'CONTINUE', 'SILENTLYCONTINUE']);
+let azPSVersion: string;
 async function main() {
     try {
         const inlineScript: string = core.getInput('inlineScript', { required: true });
-        const azPSVersion: string = core.getInput('azPSVersion', { required: true }).trim().toLowerCase();
-        const errorActionPreference: string = core.getInput('errorActionPreference') || "SilentlyContinue";
+        azPSVersion = core.getInput('azPSVersion', { required: true }).trim().toLowerCase();
+        const errorActionPreference: string = core.getInput('errorActionPreference');
         const failOnStandardError = core.getInput('failOnStandardError').trim().toLowerCase() === "true";
+        console.log(`errorActionPref: ${errorActionPreference}`);
         console.log(`Validating inputs`);
         validateInputs(inlineScript, azPSVersion, errorActionPreference);
 
@@ -35,7 +37,8 @@ function validateInputs(inlineScript: string, azPSVersion: string, errorActionPr
     }
     if (azPSVersion !== "latest") {
         if (!Utils.isValidVersion(azPSVersion)) {
-            throw new Error(`Invalid azPSVersion : ${azPSVersion}. Please enter a valid azPSVersion.`);
+            console.log(`Invalid azPSVersion : ${azPSVersion}. Using latest Az Module version.`);
+            azPSVersion = 'latest';
         }
     }
     validateErrorActionPref(errorActionPreference);
