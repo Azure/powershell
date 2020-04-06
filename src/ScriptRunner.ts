@@ -20,8 +20,6 @@ export default class ScriptRunner {
         let output: string = "";
         const error: string[] = [];
         const options: any = {
-            outStream: process.stdout,
-            errStream: process.stderr,
             listeners: {
                 stdout: (data: Buffer) => {
                     output += data.toString();

@@ -34,11 +34,8 @@ export default class Utils {
     static async getLatestModule(moduleName: string): Promise<string> {
         let output: string = "";
         const options: any = {
-            outStream: process.stdout,
-            errStream: process.stderr,
             listeners: {
                 stdout: (data: Buffer) => {
-                    console.log(' am in listener')
                     output += data.toString();
                 }
             }
@@ -60,8 +57,6 @@ export default class Utils {
     static async checkModuleVersion(moduleName: string, version: string) {
         let output: string = "";
         const options: any = {
-            outStream: process.stdout,
-            errStream: process.stderr,
             listeners: {
                 stdout: (data: Buffer) => {
                     output += data.toString();
