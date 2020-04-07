@@ -13,7 +13,7 @@ async function main() {
         const errorActionPreference: string = core.getInput('errorActionPreference');
         const failOnStandardError = core.getInput('failOnStandardError').trim().toLowerCase() === "true";
         console.log(`Validating inputs`);
-        validateInputs(inlineScript, azPSVersion, errorActionPreference);
+        validateInputs(inlineScript, errorActionPreference);
 
         console.log(`Initializing Az Module`);
         await InitializeAzure.importAzModule(azPSVersion);
@@ -30,7 +30,7 @@ async function main() {
     }
 }
 
-function validateInputs(inlineScript: string, azPSVersion: string, errorActionPreference: string) {
+function validateInputs(inlineScript: string, errorActionPreference: string) {
     if (!inlineScript.trim()) {
         throw new Error(`inlineScript is empty. Please enter a valid script.`);
     }
