@@ -1,10 +1,10 @@
 on:
   pull_request:
     branches:
-      - unit-tests
+      - master
   push:
     branches:
-      - unit-tests
+      - master
 
 jobs:
   build_test_job:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
         matrix:
-          os: [windows-latest, ubuntu-latest]
+          os: [windows-latest, ubuntu-latest, macos-latest]
     steps:
 
     - name: 'Checking out repo code'
