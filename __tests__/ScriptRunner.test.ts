@@ -19,8 +19,7 @@ describe('Testing ScriptRunner', () => {
         executeFileSpy = jest.spyOn(scriptRunner, 'executeFile');
     });
     test('executeFile should pass', async () => {
-        executeFileSpy.mockImplementationOnce(() => Promise.resolve(
-            console.log('Script execution complete')));
+        executeFileSpy.mockImplementationOnce(() => Promise.resolve());
         await scriptRunner.executeFile();
         expect(executeFileSpy).toHaveBeenCalled();
     });
