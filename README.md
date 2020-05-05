@@ -37,7 +37,7 @@ jobs:
           Get-AzVM -ResourceGroupName "ResourceGroup11"
         azPSVersion: '3.1.0'
 ```
-Azure PowerShell Script to be executed can be given under inlineScript as shown in the sample workflow. Az module version to be used can be chosen from the [list](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/deploy/azure-powershell?view=azure-devops#error-could-not-find-the-modules--with-version--if-the-module-was-recently-installed-retry-after-restarting-the-azure-pipelines-task-agent). To use the latest version, specify 'latest'.
+Azure PowerShell Script to be executed can be given under inlineScript as shown in the sample workflow.
 
 Both [Azure Login](https://github.com/Azure/login) and [Azure PowerShell](https://github.com/azure/powershell) action uses Az module.
 
@@ -45,7 +45,7 @@ Currently, Azure PowerShell action only supports ubuntu and windows runners. Mac
 
 #### Available versions of Az Module on runner
 
-You can find the list of Az module versions that can be given as azPSVersion in the following table:
+To use the latest Az module version, specify 'latest'. You can find the list of Az module versions that can be given as azPSVersion in the following table.
 
 | Environment | YAML Label | Az module versions
 | --------------------|---------------------|--------------------
