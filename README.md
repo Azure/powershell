@@ -1,3 +1,61 @@
+# Github action for Azure PowerShell
+This repository contains Github action for Azure PowerShell to automate your github workflows using Azure PowerShell scripts.
+
+Get started today with a [free Azure account](https://azure.com/free/open-source)!
+
+The definition of this Github Action is in [action.yml](https://github.com/azure/powershell/blob/master/action.yml).
+
+## End-to-End Sample Workflows
+
+### Dependencies on other Github Actions
+
+Login to Azure before running Azure PowerShell scripts using [Azure Login](https://github.com/Azure/login). Refer [Azure Login](https://github.com/Azure/login#configure-azure-credentials) action on how to configure Azure credentials.
+
+Once login is done, Azure PowerShell action will use the same session to run the script. 
+
+#### Sample workflow to run inlinescript using Azure PowerShell
+```yaml
+on: [push]
+
+name: AzurePowerShellSample
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: Login via Az module
+      uses: azure/login@v1.1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+        enable-AzPSSession: true 
+        
+    - uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          Get-AzVM -ResourceGroupName "ResourceGroup11"
+        azPSVersion: '3.1.0'
+```
+Azure PowerShell Script to be executed can be given under inlineScript as shown in the sample workflow.
+
+Both [Azure Login](https://github.com/Azure/login) and [Azure PowerShell](https://github.com/azure/powershell) action uses Az module.
+
+Currently, Azure PowerShell action only supports ubuntu and windows runners. Macos is not supported. 
+
+#### Available versions of Az Module on runner
+
+To use the latest Az module version, specify 'latest'. You can find the list of Az module versions that can be given as azPSVersion in the following table.
+
+| Environment | YAML Label | Az module versions
+| --------------------|---------------------|--------------------
+| Ubuntu 18.04 | `ubuntu-latest` or `ubuntu-18.04` | [ubuntu-18.04](https://github.com/actions/virtual-environments/blob/master/images/linux/Ubuntu1804-README.md)
+| Ubuntu 16.04 | `ubuntu-16.04` | [ubuntu-16.04](https://github.com/actions/virtual-environments/blob/master/images/linux/Ubuntu1604-README.md)
+| Windows Server 2019 | `windows-latest` or `windows-2019` | [windows-2019](https://github.com/actions/virtual-environments/blob/master/images/win/Windows2019-Readme.md#az-powershell-module)
+| Windows Server 2016 | `windows-2016` | [windows-2016](https://github.com/actions/virtual-environments/blob/master/images/win/Windows2016-Readme.md#az-powershell-module)
+
+##### Note:
+For ubuntu-18.04 and ubuntu-16.04 runners, please search for the az module in the software page to see the versions.
 
 # Contributing
 
