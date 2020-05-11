@@ -36,7 +36,7 @@ jobs:
       with:
         inlineScript: |
           Get-AzVM -ResourceGroupName "ResourceGroup11"
-          azPSVersion: '3.1.0'
+        azPSVersion: '3.1.0'
 ```
 Azure PowerShell Script to be executed can be given under inlineScript as shown in the sample workflow.
 
