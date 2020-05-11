@@ -1,13 +1,13 @@
-# Github action for Azure PowerShell
-This repository contains Github action for Azure PowerShell to automate your github workflows using Azure PowerShell scripts.
+# GitHub action for Azure PowerShell
+This repository contains GitHub action for Azure PowerShell to automate your GitHub workflows using Azure PowerShell scripts.
 
 Get started today with a [free Azure account](https://azure.com/free/open-source)!
 
-The definition of this Github Action is in [action.yml](https://github.com/azure/powershell/blob/master/action.yml).
+The definition of this GitHub Action is in [action.yml](https://github.com/azure/powershell/blob/master/action.yml).
 
-## End-to-End Sample Workflows
+## End-to-End Sample Workflow
 
-### Dependencies on other Github Actions
+### Dependencies on other GitHub Actions
 
 Login to Azure before running Azure PowerShell scripts using [Azure Login](https://github.com/Azure/login). Refer [Azure Login](https://github.com/Azure/login#configure-azure-credentials) action on how to configure Azure credentials.
 
@@ -31,21 +31,22 @@ jobs:
         creds: ${{secrets.AZURE_CREDENTIALS}}
         enable-AzPSSession: true 
         
-    - uses: azure/powershell@v1
+    - name: Run Azure PowerShell script
+      uses: azure/powershell@v1
       with:
         inlineScript: |
           Get-AzVM -ResourceGroupName "ResourceGroup11"
-        azPSVersion: '3.1.0'
+          azPSVersion: '3.1.0'
 ```
 Azure PowerShell Script to be executed can be given under inlineScript as shown in the sample workflow.
 
 Both [Azure Login](https://github.com/Azure/login) and [Azure PowerShell](https://github.com/azure/powershell) action uses Az module.
 
-Currently, Azure PowerShell action only supports ubuntu and windows runners. Macos is not supported. 
+Currently, Azure PowerShell action only supports ubuntu and windows runners. MacOS is not supported. 
 
 #### Available versions of Az Module on runner
 
-To use the latest Az module version, specify 'latest'. You can find the list of Az module versions that can be given as azPSVersion in the following table.
+To use the latest Az module version, specify 'latest'. You can find the list of Az module versions that can be given as azPSVersion from the following table.
 
 | Environment | YAML Label | Az module versions
 | --------------------|---------------------|--------------------
