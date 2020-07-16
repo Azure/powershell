@@ -31,7 +31,8 @@ jobs:
         creds: ${{secrets.AZURE_CREDENTIALS}}
         enable-AzPSSession: true 
         
-    - uses: azure/powershell@v1
+    - name: Run Azure PowerShell script    
+      uses: azure/powershell@v1
       with:
         inlineScript: |
           Get-AzVM -ResourceGroupName "ResourceGroup11"
@@ -41,11 +42,11 @@ Azure PowerShell Script to be executed can be given under inlineScript as shown 
 
 Both [Azure Login](https://github.com/Azure/login) and [Azure PowerShell](https://github.com/azure/powershell) action uses Az module.
 
-Currently, Azure PowerShell action only supports ubuntu and windows runners. Macos is not supported. 
+Currently, Azure PowerShell action only supports ubuntu and windows runners. MacOS is not supported. Self hosted runners are not supported.
 
 #### Available versions of Az Module on runner
 
-To use the latest Az module version, specify 'latest'. You can find the list of Az module versions that can be given as azPSVersion in the following table.
+To use the latest Az module version, specify 'latest'. You can find the list of Az module versions that can be given as azPSVersion from the following table.
 
 | Environment | YAML Label | Az module versions
 | --------------------|---------------------|--------------------
