@@ -42,7 +42,7 @@ Azure PowerShell Script to be executed can be given under inlineScript as shown 
 
 Both [Azure Login](https://github.com/Azure/login) and [Azure PowerShell](https://github.com/azure/powershell) action uses Az module.
 
-Currently, Azure PowerShell action only supports ubuntu and windows runners. MacOS is not supported. 
+Currently, Azure PowerShell action only supports ubuntu and windows runners. MacOS is not supported. Self hosted runners are not supported.
 
 #### Available versions of Az Module on runner
 
