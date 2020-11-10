@@ -1,4 +1,5 @@
 import * as core from '@actions/core';
+import * as crypto from 'crypto';
 import Utils from './Utilities/Utils';
 import FileUtils from './Utilities/FileUtils';
 import ScriptRunner from './ScriptRunner';
@@ -6,8 +7,17 @@ import InitializeAzure from './InitializeAzure';
 
 const errorActionPrefValues = new Set(['STOP', 'CONTINUE', 'SILENTLYCONTINUE']);
 let azPSVersion: string;
+
+let userAgentPrefix = !!process.env.AZURE_HTTP_USER_AGENT ? `${process.env.AZURE_HTTP_USER_AGENT}` : "";
+
 async function main() {
     try {
+        // Set user agent variable
+        let usrAgentRepo = crypto.createHash('sha256').update(`${process.env.GITHUB_REPOSITORY}`).digest('hex');
+        let actionName = 'AzurePowerShellAction';
+        let userAgentString = (!!userAgentPrefix ? `${userAgentPrefix}+` : '') + `GITHUBACTIONS_${actionName}_${usrAgentRepo}`;
+        core.exportVariable('AZURE_HTTP_USER_AGENT', userAgentString);
+
         const inlineScript: string = core.getInput('inlineScript', { required: true });
         azPSVersion = core.getInput('azPSVersion', { required: true }).trim().toLowerCase();
         const errorActionPreference: string = core.getInput('errorActionPreference');
@@ -27,6 +37,8 @@ async function main() {
         core.setFailed(error);
     } finally {
         FileUtils.deleteFile(ScriptRunner.filePath);
+        // Reset AZURE_HTTP_USER_AGENT
+        core.exportVariable('AZURE_HTTP_USER_AGENT', userAgentPrefix);
     }
 }
 
