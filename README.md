@@ -44,6 +44,8 @@ Both [Azure Login](https://github.com/Azure/login) and [Azure PowerShell](https:
 
 Currently, Azure PowerShell action only supports ubuntu and windows runners. MacOS is not supported. Self hosted runners are not supported.
 
+Azure PowerShell actions supports both 'AzureUSGovernment' or 'AzureChinaCloud'.The workflow needs to connect to 'AzureUSGovernment' or 'AzureChinaCloud'  azlogin@v1.2 action with AzPowershell before using Azure Powershell action. 
+
 #### Available versions of Az Module on runner
 
 To use the latest Az module version, specify 'latest'. You can find the list of Az module versions that can be given as azPSVersion from the following table.
