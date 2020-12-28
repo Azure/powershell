@@ -44,6 +44,29 @@ Both [Azure Login](https://github.com/Azure/login) and [Azure PowerShell](https:
 
 Currently, Azure PowerShell action only supports ubuntu and windows runners. MacOS is not supported. Self hosted runners are not supported.
 
+Azure PowerShell action is now supported for the Azure public cloud as well as Azure government clouds ('AzureUSGovernment' or 'AzureChinaCloud') and Azure Stack ('AzureStack') Hub. Before running Azure PowerShell scripts, login to the respective Azure Cloud  using [Azure Login](https://github.com/Azure/login) by setting appropriate value for the `environment` parameter.
+
+### Sample workflow to run Azure powershell actions in Azure US Government cloud
+
+```
+   .......
+   .......
+   .......
+   
+   - name: Login to Azure US Gov Cloud with Az Powershell 
+        uses: azure/login@releases/azcloud-v1
+        with:
+          creds: ${{ secrets.AZURE_US_GOV_CREDENTIALS }}
+          environment: 'AzureUSGovernment'
+          enable-AzPSSession: true
+    
+      - name: Run powershell command in US Gov Cloud
+        uses: azure/powershell@v1
+        with:
+          inlineScript: "Get-AzContext"
+          azPSVersion: "latest"
+```
+
 #### Available versions of Az Module on runner
 
 To use the latest Az module version, specify 'latest'. You can find the list of Az module versions that can be given as azPSVersion from the following table.
