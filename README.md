@@ -46,6 +46,10 @@ Currently, Azure PowerShell action only supports ubuntu and windows runners. Mac
 
 Azure PowerShell action is now supported for the Azure public cloud as well as Azure government clouds ('AzureUSGovernment' or 'AzureChinaCloud') and Azure Stack ('AzureStack') Hub. Before running Azure PowerShell scripts, login to the respective Azure Cloud  using [Azure Login](https://github.com/Azure/login) by setting appropriate value for the `environment` parameter.
 
+Additionally the action supports two optional parameters 
+- `errorActionPreference` : select a suitable  value for the variable for executing the script. Allowed values are `stop`, `continue`, `silentlyContinue`. Default is `Stop`.
+- `failOnStandardError` : By default this is marked as `false`. But if this is marked as `true`, the action will fail if any errors are written to the error pipeline, or if any data is written to the Standard Error stream.
+
 ### Sample workflow to run Azure powershell actions in Azure US Government cloud
 
 ```
