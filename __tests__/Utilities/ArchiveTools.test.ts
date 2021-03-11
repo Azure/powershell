@@ -1,5 +1,7 @@
 import { ArchiveTools } from "../../src/Utilities/ArchiveTools";
 
+jest.mock("@actions/core");
+
 describe('Testing ArchiveTools', () => {
     test('unzip using powershell to extract', async () => {
         const archiveTool = new ArchiveTools();

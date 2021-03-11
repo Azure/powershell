@@ -5,15 +5,23 @@ import { ArchiveTools } from './Utilities/ArchiveTools';
 import FileUtils from './Utilities/FileUtils';
 import Utils from './Utilities/Utils';
 
-interface InstallResult {
+export interface InstallResult {
     moduleSource: string;
     isInstalled: boolean;
+}
+
+export const AzModuleSource = {
+    PrivateAgent: "privateAgent",
+    Folder: "hostedAgentFolder",
+    Zip: "hostedAgentZip",
+    GHRelease: "hostedAgentGHRelease",
+    PSGallery: "hostedAgentPSGallery"
 }
 
 export class AzModuleInstaller {
     private version: string;
     private githubAuth: string;
-    private moduleContainerPath: string;
+    private moduleRoot: string;
     private modulePath: string;
     private moduleZipPath: string;
     private installResult: InstallResult;
@@ -27,16 +35,17 @@ export class AzModuleInstaller {
             isInstalled: false
         };
         const platform = (process.env.RUNNER_OS || os.type())?.toLowerCase();
+        core.debug(`Platform: ${platform}`);
         switch(platform) {
             case "windows":
             case "windows_nt":
                 this.isWin = true;
-                this.moduleContainerPath = "C:\\Modules";
-                this.modulePath = `${this.moduleContainerPath}\\az_${this.version}`
+                this.moduleRoot = "C:\\Modules";
+                this.modulePath = `${this.moduleRoot}\\az_${this.version}`
                 break;
             case "linux":
-                this.moduleContainerPath = "/usr/share";
-                this.modulePath = `${this.moduleContainerPath}/az_${this.version}`
+                this.moduleRoot = "/usr/share";
+                this.modulePath = `${this.moduleRoot}/az_${this.version}`
                 break;
             default:
                 throw `OS ${platform} not supported`;
@@ -45,7 +54,7 @@ export class AzModuleInstaller {
     }
 
     public async install(): Promise<InstallResult> {
-        if (Utils.isHostedAgent(this.moduleContainerPath)) {
+        if (Utils.isHostedAgent(this.moduleRoot)) {
             await this.tryInstallingLatest();
             await this.tryInstallFromFolder();
             await this.tryInstallFromZip();
@@ -55,7 +64,7 @@ export class AzModuleInstaller {
             core.debug("File layout is not like hosted agent, skippig module install.");
             this.installResult = {
                 isInstalled: false,
-                moduleSource: "privateAgent"
+                moduleSource: AzModuleSource.PrivateAgent
             };
         }
 
@@ -64,6 +73,7 @@ export class AzModuleInstaller {
 
     private async tryInstallingLatest() {
         if (this.installResult.isInstalled) {
+            core.debug(`Module already installed skipping tryInstallingLatest`);
             return;
         }
 
@@ -71,13 +81,14 @@ export class AzModuleInstaller {
             core.debug("Latest selected, will use latest Az module available in agent as folder.");
             this.installResult = {
                 isInstalled: true,
-                moduleSource: "hostedAgentFolder"
+                moduleSource: AzModuleSource.Folder
             };
         }
     }
 
     private async tryInstallFromFolder() {
         if (this.installResult.isInstalled) {
+            core.debug(`Module already installed skipping tryInstallFromFolder`);
             return;
         }
 
@@ -85,29 +96,31 @@ export class AzModuleInstaller {
             core.debug(`Az ${this.version} present at ${this.modulePath} as folder.`);
             this.installResult = {
                 isInstalled: true,
-                moduleSource: "hostedAgentFolder"
+                moduleSource: AzModuleSource.Folder
             };
         }
     }
 
     private async tryInstallFromZip() {
         if (this.installResult.isInstalled) {
+            core.debug(`Module already installed skipping tryInstallFromZip`);
             return;
         }
 
         if (FileUtils.pathExists(this.moduleZipPath)) {
             core.debug(`Az ${this.version} present at ${this.moduleZipPath} as zip, expanding it.`);
-            await new ArchiveTools(this.isWin).unzip(this.moduleZipPath, this.moduleContainerPath);
+            await new ArchiveTools(this.isWin).unzip(this.moduleZipPath, this.moduleRoot);
             await FileUtils.deleteFile(this.moduleZipPath);
             this.installResult = {
                 isInstalled: true,
-                moduleSource: "hostedAgentZip"
+                moduleSource: AzModuleSource.Zip
             };
         }
     }
 
     private async tryInstallFromGHRelease() {
         if (this.installResult.isInstalled) {
+            core.debug(`Module already installed skipping tryInstallFromGHRelease`);
             return;
         }
 
@@ -116,11 +129,11 @@ export class AzModuleInstaller {
             core.debug(`Downloading Az ${this.version} from GHRelease using url ${downloadUrl}`);
             await tc.downloadTool(downloadUrl, this.moduleZipPath, this.githubAuth);
             core.debug(`Expanding Az ${this.version} downloaded at ${this.moduleZipPath} as zip.`);
-            await new ArchiveTools(this.isWin).unzip(this.moduleZipPath, this.moduleContainerPath);
+            await new ArchiveTools(this.isWin).unzip(this.moduleZipPath, this.moduleRoot);
             await FileUtils.deleteFile(this.moduleZipPath);
             this.installResult = {
                 isInstalled: true,
-                moduleSource: "hostedAgentGHRelease"
+                moduleSource: AzModuleSource.GHRelease
             };
         } catch (err) {
             core.debug(err);
@@ -130,13 +143,14 @@ export class AzModuleInstaller {
 
     private async tryInstallFromPSGallery() {
         if (this.installResult.isInstalled) {
+            core.debug(`Module already installed skipping tryInstallFromPSGallery`);
             return;
         }
 
         await Utils.saveAzModule(this.version, this.modulePath);
         this.installResult = {
             isInstalled: true,
-            moduleSource: "hostedAgentPSGallery"
+            moduleSource: AzModuleSource.PSGallery
         };
     }
 
@@ -149,11 +163,10 @@ export class AzModuleInstaller {
             "main");
         core.debug(JSON.stringify(releases));
         const releaseInfo = releases.filter(release => release.version === this.version)?.[0];
-        let downloadUrl: string = null;
-        if (releaseInfo && releaseInfo.files.length > 0) {
-            downloadUrl = releaseInfo.files[0].download_url;
+        if (!releaseInfo || releaseInfo.files.length === 0) {
+            throw new Error(`Version ${this.version} not present in versions manifest of GHRelease.`);
         }
 
-        return downloadUrl
+        return releaseInfo.files[0].download_url;
     }
 }
