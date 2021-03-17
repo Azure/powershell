@@ -22,6 +22,7 @@
     "@actions/core": "^1.2.2",
     "@actions/exec": "^1.0.3",
     "@actions/io": "^1.0.2",
+    "@actions/tool-cache": "^1.6.1",
     "fs": "0.0.1-security",
     "os": "^0.1.1",
     "path": "^0.12.7",

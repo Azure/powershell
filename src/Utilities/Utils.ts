@@ -83,5 +83,38 @@ export default class Utils {
         return !!version.match(Constants.versionPattern);
     }
 
-}
+    static async isHostedAgent(moduleContainerPath: string): Promise<boolean> {
+        const script = `Test-Path (Join-Path "${moduleContainerPath}" "az_*")`;
+        let output: string = "";
+        const options: any = {
+            listeners: {
+                stdout: (data: Buffer) => {
+                    output += data.toString();
+                }
+            }
+        };
+        await PowerShellToolRunner.init();
+        await PowerShellToolRunner.executePowerShellCommand(script, options);
+        return output.trim().toLowerCase() === "true";
+    }
+    
+    static isGhes(): boolean {
+        const ghUrl = new URL(
+            process.env['GITHUB_SERVER_URL'] || 'https://github.com'
+        );
+        return ghUrl.hostname.toUpperCase() !== 'GITHUB.COM';
+    }
 
+    static async saveAzModule(version: string, modulePath: string): Promise<void> {
+        const script = `
+            $prevProgressPref = $ProgressPreference
+            $ProgressPreference = 'SilentlyContinue'
+            Save-Module -Path ${modulePath} -Name Az -RequiredVersion ${version} -Force -ErrorAction Stop
+            $ProgressPreference = $prevProgressPref`;
+        await PowerShellToolRunner.init();
+        const exitCode = await PowerShellToolRunner.executePowerShellScriptBlock(script);
+        if (exitCode != 0) {
+            throw new Error(`Download from PSGallery failed for Az ${version} to ${modulePath}`);
+        }
+    }
+}
