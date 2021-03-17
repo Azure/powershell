@@ -4,6 +4,7 @@ import Utils from './Utilities/Utils';
 import FileUtils from './Utilities/FileUtils';
 import ScriptRunner from './ScriptRunner';
 import InitializeAzure from './InitializeAzure';
+import { AzModuleInstaller } from './AzModuleInstaller';
 
 const errorActionPrefValues = new Set(['STOP', 'CONTINUE', 'SILENTLYCONTINUE']);
 let azPSVersion: string;
@@ -22,8 +23,13 @@ async function main() {
         azPSVersion = core.getInput('azPSVersion', { required: true }).trim().toLowerCase();
         const errorActionPreference: string = core.getInput('errorActionPreference');
         const failOnStandardError = core.getInput('failOnStandardError').trim().toLowerCase() === "true";
+        const githubToken = core.getInput('githubToken');
         console.log(`Validating inputs`);
         validateInputs(inlineScript, errorActionPreference);
+
+        const githubAuth = !githubToken || Utils.isGhes() ? undefined : `token ${githubToken}`;
+        const installResult = await new AzModuleInstaller(azPSVersion, githubAuth).install();
+        console.log(`Module Az ${azPSVersion} installed from ${installResult.moduleSource}`);
 
         console.log(`Initializing Az Module`);
         await InitializeAzure.importAzModule(azPSVersion);

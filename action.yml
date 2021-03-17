@@ -16,6 +16,9 @@ inputs:
     description: 'If this is true, this task will fail if any errors are written to the error pipeline, or if any data is written to the Standard Error stream.'
     required: false
     default: 'false'
+  githubToken:
+    description: Used to pull Az module from Azure/az-ps-module-versions.  Since there's a default, this is typically not supplied by the user.
+    default: ${{ github.token }}
 branding:
   icon: 'login.svg'
   color: 'blue'
