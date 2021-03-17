@@ -28,4 +28,8 @@ export default class FileUtils {
             }
         }
     }
+
+    static pathExists(path: string) {
+        return fs.existsSync(path);
+    }
 }
