@@ -85,6 +85,11 @@ To use the latest Az module version, specify 'latest'. You can find the list of 
 ##### Note:
 For ubuntu-18.04 and ubuntu-16.04 runners, please search for the az module in the software page to see the versions.
 
+# Getting Help for Azure PowerShell Issues
+
+If you encounter an issue related to the Azure PowerShell commands executed in your script, you can 
+file an issue directly on the [Azure PowerShell repository](https://github.com/Azure/azure-powershell/issues/new/choose).
+
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
