@@ -73,17 +73,7 @@ Additionally the action supports two optional parameters
 
 #### Available versions of Az Module on runner
 
-To use the latest Az module version, specify 'latest'. You can find the list of Az module versions that can be given as azPSVersion from the following table.
-
-| Environment | YAML Label | Az module versions
-| --------------------|---------------------|--------------------
-| Ubuntu 18.04 | `ubuntu-latest` or `ubuntu-18.04` | [ubuntu-18.04](https://github.com/actions/virtual-environments/blob/master/images/linux/Ubuntu1804-README.md)
-| Ubuntu 16.04 | `ubuntu-16.04` | [ubuntu-16.04](https://github.com/actions/virtual-environments/blob/master/images/linux/Ubuntu1604-README.md)
-| Windows Server 2019 | `windows-latest` or `windows-2019` | [windows-2019](https://github.com/actions/virtual-environments/blob/master/images/win/Windows2019-Readme.md#az-powershell-module)
-| Windows Server 2016 | `windows-2016` | [windows-2016](https://github.com/actions/virtual-environments/blob/master/images/win/Windows2016-Readme.md#az-powershell-module)
-
-##### Note:
-For ubuntu-18.04 and ubuntu-16.04 runners, please search for the az module in the software page to see the versions.
+To use the latest Az module version, specify 'latest'. You can find the list of Az module versions that can be given as azPSVersion from this [table](https://github.com/actions/virtual-environments#available-environments).
 
 # Getting Help for Azure PowerShell Issues
 
