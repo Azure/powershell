@@ -1,27 +1,27 @@
 # Azure PowerShell Action
 name: 'Azure PowerShell Action'
-description: 'Automate your GitHub workflows using Azure PowerShell scripts.'
+description: 'Automate your GitHub workflows using Azure PowerShell scripts.'
 inputs:
   inlineScript:
-    description: 'Specify the Az PowerShell script here.'
+    description: 'Specify the Az PowerShell script here.'
     required: true
   azPSVersion:
-    description: 'Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".'
+    description: 'Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".'
     required: true
   errorActionPreference:
-    description: 'Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.'
+    description: 'Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.'
     required: false
     default: 'Stop'
   failOnStandardError:
-    description: 'If this is true, this task will fail if any errors are written to the error pipeline, or if any data is written to the Standard Error stream.'
+    description: 'If this is true, this task will fail if any errors are written to the error pipeline, or if any data is written to the Standard Error stream.'
     required: false
     default: 'false'
   githubToken:
     description: Used to pull Az module from Azure/az-ps-module-versions.  Since there's a default, this is typically not supplied by the user.
     default: ${{ github.token }}
 branding:
-  icon: 'login.svg'
+  icon: 'log-in'
   color: 'blue'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'lib/main.js'
