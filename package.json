@@ -27,8 +27,8 @@
     "os": "^0.1.1",
     "path": "^0.12.7",
     "stream": "0.0.2",
-    "uuid": "^7.0.2",
-    "typescript": "^4.0.0"
+    "typescript": "^4.9.3",
+    "uuid": "^7.0.2"
   },
   "devDependencies": {
     "@types/jest": "^25.2.1",
