@@ -73,7 +73,7 @@ Additionally the action supports two optional parameters
 
 #### Available versions of Az Module on runner
 
-To use the latest Az module version, specify 'latest'. You can find the list of Az module versions that can be given as azPSVersion from this [table](https://github.com/actions/virtual-environments#available-environments).
+To use the latest Az module version, specify 'latest'. You can find the latest Az module versions on different runner images from this [table](https://github.com/actions/runner-images#available-images).
 
 # Getting Help for Azure PowerShell Issues
 
