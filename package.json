@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/Azure/powershell#readme",
   "dependencies": {
-    "@actions/core": "^1.2.2",
+    "@actions/core": "1.9.1",
     "@actions/exec": "^1.0.3",
     "@actions/io": "^1.0.2",
     "@actions/tool-cache": "^1.6.1",
@@ -30,11 +30,11 @@
     "uuid": "^7.0.2"
   },
   "devDependencies": {
-    "@types/jest": "^25.2.1",
+    "@types/jest": "^29.2.4",
     "@types/node": "^13.7.7",
     "jest": "^29.3.1",
-    "jest-circus": "^25.2.7",
-    "ts-jest": "^25.3.1",
-    "typescript": "^3.8.3"
+    "jest-circus": "^29.3.1",
+    "ts-jest": "^29.0.3",
+    "typescript": "^4.9.4"
   }
 }
