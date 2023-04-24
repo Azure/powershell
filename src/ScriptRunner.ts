@@ -1,17 +1,19 @@
 import * as core from '@actions/core';
+import * as path from 'path';
 
 import FileUtils from "./Utilities/FileUtils";
 import PowerShellToolRunner from "./Utilities/PowerShellToolRunner";
-import ScriptBuilder from './Utilities/ScriptBuilder';
 
 export default class ScriptRunner {
-    static filePath: string;
+    isRunningInlineScript: boolean = false;
     inlineScript: string;
+    inputFile: string;
     errorActionPreference: string;
     failOnStandardErr: boolean;
 
-    constructor(inlineScript: string, errorActionPreference: string, failOnStandardErr:boolean) {
+    constructor(inlineScript: string, inputFile: string, errorActionPreference: string, failOnStandardErr: boolean) {
         this.inlineScript = inlineScript;
+        this.inputFile = inputFile;
         this.errorActionPreference = errorActionPreference;
         this.failOnStandardErr = failOnStandardErr;
     }
@@ -34,20 +36,48 @@ export default class ScriptRunner {
                 }
             }
         };
-        const scriptToExecute: string = new ScriptBuilder().getInlineScriptFile(
-            this.inlineScript, this.errorActionPreference);
-        ScriptRunner.filePath = await FileUtils.createScriptFile(scriptToExecute);
-        core.debug(`script file to run: ${ScriptRunner.filePath}`);
-        await PowerShellToolRunner.init();
-        const exitCode: number = await PowerShellToolRunner.executePowerShellScriptBlock(ScriptRunner.filePath, options);
-        if (exitCode !== 0) {
-            core.setOutput(`Azure PowerShell exited with code:`, exitCode.toString());
-            if (this.failOnStandardErr) {
-                error.forEach((err: string) => {
-                    core.error(err);
-                });
-                throw new Error(`Standard error stream contains one or more lines`);
+        let filePath: string;
+        try {
+            filePath = await this.getScriptFile(this.inlineScript, this.inputFile);
+            core.debug(`script file to run: ${filePath}`);
+            let runnerScript = this.getRunnerScript(filePath, this.errorActionPreference);
+            await PowerShellToolRunner.init();
+            const exitCode: number = await PowerShellToolRunner.executePowerShellScriptBlock(runnerScript, options);
+            if (exitCode !== 0) {
+                core.setOutput(`Azure PowerShell exited with code:`, exitCode.toString());
+                if (this.failOnStandardErr) {
+                    error.forEach((err: string) => {
+                        core.error(err);
+                    });
+                    throw new Error(`Standard error stream contains one or more lines`);
+                }
+            }
+
+        } finally {
+            if (filePath && this.isRunningInlineScript) {
+                FileUtils.deleteFile(filePath);
             }
         }
+    }
+
+    getScriptFile(inlineScript: string, inputFile: string) {
+        if (inlineScript && inlineScript.trim()) {
+            this.isRunningInlineScript = true;
+            return FileUtils.createScriptFile(inlineScript);
+        } else {
+            if (inputFile && inputFile.trim()) {
+                this.isRunningInlineScript = false;
+                return path.join(process.env.GITHUB_WORKSPACE, inputFile);;
+            } else {
+                throw new Error(`inlineScript and inputFile are both empty. Please enter a valid script or a valid input file.`);
+            }
+        }
+    }
+
+    getRunnerScript(filePath: string, errorActionPreference: string) {
+        return `
+        $ErrorActionPreference = '${errorActionPreference}'
+        ${filePath}
+        `;
     }
 }

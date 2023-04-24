@@ -1,7 +1,6 @@
 import * as core from '@actions/core';
 import * as crypto from 'crypto';
 import Utils from './Utilities/Utils';
-import FileUtils from './Utilities/FileUtils';
 import ScriptRunner from './ScriptRunner';
 import InitializeAzure from './InitializeAzure';
 import { AzModuleInstaller } from './AzModuleInstaller';
@@ -19,13 +18,16 @@ async function main() {
         let userAgentString = (!!userAgentPrefix ? `${userAgentPrefix}+` : '') + `GITHUBACTIONS_${actionName}_${usrAgentRepo}`;
         core.exportVariable('AZURE_HTTP_USER_AGENT', userAgentString);
 
-        const inlineScript: string = core.getInput('inlineScript', { required: true });
+        const inlineScript: string = core.getInput('inlineScript', { required: false });
+        const inputFile: string = core.getInput('inputFile', { required: false });
+        core.debug(`inlineScript: ${inlineScript}`);
+        core.debug(`inputFile: ${inputFile}`);
         azPSVersion = core.getInput('azPSVersion', { required: true }).trim().toLowerCase();
         const errorActionPreference: string = core.getInput('errorActionPreference');
         const failOnStandardError = core.getInput('failOnStandardError').trim().toLowerCase() === "true";
         const githubToken = core.getInput('githubToken');
         console.log(`Validating inputs`);
-        validateInputs(inlineScript, errorActionPreference);
+        validateInputs(inlineScript, inputFile, errorActionPreference);
 
         const githubAuth = !githubToken || Utils.isGhes() ? undefined : `token ${githubToken}`;
         const installResult = await new AzModuleInstaller(azPSVersion, githubAuth).install();
@@ -36,21 +38,22 @@ async function main() {
         console.log(`Initializing Az Module Complete`);
 
         console.log(`Running Az PowerShell Script`);
-        const scriptRunner: ScriptRunner = new ScriptRunner(inlineScript, errorActionPreference, failOnStandardError);
+        const scriptRunner: ScriptRunner = new ScriptRunner(inlineScript, inputFile, errorActionPreference, failOnStandardError);
         await scriptRunner.executeFile();
         console.log(`Script execution Complete`);
     } catch(error) {
         core.setFailed(error);
     } finally {
-        FileUtils.deleteFile(ScriptRunner.filePath);
         // Reset AZURE_HTTP_USER_AGENT
         core.exportVariable('AZURE_HTTP_USER_AGENT', userAgentPrefix);
     }
 }
 
-function validateInputs(inlineScript: string, errorActionPreference: string) {
-    if (!inlineScript.trim()) {
-        throw new Error(`inlineScript is empty. Please enter a valid script.`);
+function validateInputs(inlineScript: string, inputFile: string, errorActionPreference: string) {
+    const inlineScriptIsNull = !inlineScript || !inlineScript.trim();
+    const inputFileIsNull = !inputFile || !inputFile.trim();
+    if(inlineScriptIsNull && inputFileIsNull){
+        throw new Error(`inlineScript and inputFile are both empty. Please enter a valid script or a valid input file.`);
     }
     if (azPSVersion !== "latest") {
         if (!Utils.isValidVersion(azPSVersion)) {

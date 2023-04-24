@@ -4,7 +4,10 @@ description: 'Automate your GitHub workflows using Azure PowerShell scripts.'
 inputs:
   inlineScript:
     description: 'Specify the Az PowerShell script here.'
-    required: true
+    required: false
+  inputFile:
+    description: 'Specify the Az PowerShell script file.'
+    required: false
   azPSVersion:
     description: 'Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".'
     required: true
