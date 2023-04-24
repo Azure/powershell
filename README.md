@@ -50,6 +50,40 @@ Additionally the action supports two optional parameters
 - `errorActionPreference` : select a suitable  value for the variable for executing the script. Allowed values are `stop`, `continue`, `silentlyContinue`. Default is `Stop`.
 - `failOnStandardError` : By default this is marked as `false`. But if this is marked as `true`, the action will fail if any errors are written to the error pipeline, or if any data is written to the Standard Error stream.
 
+#### Sample workflow to run inputFile using Azure PowerShell
+```yaml
+on: [push]
+
+name: AzurePowerShellSample
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: 'Checking out repo code'
+      uses: actions/checkout@v3
+
+    - name: Login via Az module
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+        enable-AzPSSession: true 
+        
+    - name: Run Azure PowerShell script
+      uses: azure/powershell@v1
+      with:
+        inputFile: ./ps/run_az.ps1
+        azPSVersion: "latest"
+```
+
+It's similar as the example of `inlineScript`. But in this example, an `inputFile` is executed instead of an `inlineScript`. 
+
+`inputFile` should be a file in your repository. Thus, make sure the repository is checked out before the Azure PowerShell Action is used.
+
+In this example, `./ps/run_az.ps1` should be right under the repository root folder.
+
 ### Sample workflow to run Azure powershell actions in Azure US Government cloud
 
 ```
