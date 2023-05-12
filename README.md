@@ -13,7 +13,7 @@ Login to Azure before running Azure PowerShell scripts using [Azure Login](https
 
 Once login is done, Azure PowerShell action will use the same session to run the script. 
 
-#### Sample workflow to run inlinescript using Azure PowerShell
+#### Sample workflow to run inlinescript
 ```yaml
 on: [push]
 
@@ -49,6 +49,52 @@ Azure PowerShell action is now supported for the Azure public cloud as well as A
 Additionally the action supports two optional parameters 
 - `errorActionPreference` : select a suitable  value for the variable for executing the script. Allowed values are `stop`, `continue`, `silentlyContinue`. Default is `Stop`.
 - `failOnStandardError` : By default this is marked as `false`. But if this is marked as `true`, the action will fail if any errors are written to the error pipeline, or if any data is written to the Standard Error stream.
+
+#### Sample workflow to run a script file in your repository
+```yaml
+# File: ./scripts/run_azps_cmdlets.ps1
+on: [push]
+
+name: AzurePowerShellSampleWithFile
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: Check Out
+      uses: actions/checkout@v3
+
+    - name: Login Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+        enable-AzPSSession: true 
+
+    - name: Run Azure PowerShell Script File
+      uses: azure/powershell@v1
+      with:
+        inlineScript: ./scripts/run_azps_cmdlets.ps1
+        azPSVersion: "latest"
+```
+You have to check out the repository before running the script file.
+You can also run the script file with parameters. For example:
+```yaml
+    - name: Run Azure PowerShell Script File
+      uses: azure/powershell@v1
+      with:
+        inlineScript: ./scripts/run_azps_cmdlets.ps1 myresourcegroup myresourcename
+        azPSVersion: "latest"
+```
+or
+```yaml
+    - name: Run Azure PowerShell Script File
+      uses: azure/powershell@v1
+      with:
+        inlineScript: ./scripts/run_azps_cmdlets.ps1 -ResourceGroupName myresourcegroup -ResourceName myresourcename
+        azPSVersion: "latest"
+```
 
 ### Sample workflow to run Azure powershell actions in Azure US Government cloud
 
