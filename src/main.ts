@@ -18,6 +18,7 @@ async function main() {
         let actionName = 'AzurePowerShellAction';
         let userAgentString = (!!userAgentPrefix ? `${userAgentPrefix}+` : '') + `GITHUBACTIONS_${actionName}_${usrAgentRepo}`;
         core.exportVariable('AZURE_HTTP_USER_AGENT', userAgentString);
+        core.exportVariable('AZUREPS_HOST_ENVIRONMENT', userAgentString);
 
         const inlineScript: string = core.getInput('inlineScript', { required: true });
         azPSVersion = core.getInput('azPSVersion', { required: true }).trim().toLowerCase();
@@ -45,6 +46,7 @@ async function main() {
         FileUtils.deleteFile(ScriptRunner.filePath);
         // Reset AZURE_HTTP_USER_AGENT
         core.exportVariable('AZURE_HTTP_USER_AGENT', userAgentPrefix);
+        core.exportVariable('AZUREPS_HOST_ENVIRONMENT', userAgentPrefix);
     }
 }
 
