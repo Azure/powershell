@@ -3,6 +3,8 @@ import * as os from 'os';
 import Constants from '../Constants';
 import PowerShellToolRunner from '../Utilities/PowerShellToolRunner';
 import ScriptBuilder from './ScriptBuilder';
+import path from 'path';
+import fs from 'fs';
 
 export default class Utils {
     /**
@@ -11,24 +13,66 @@ export default class Utils {
      * If azPSVersion is empty, folder path in which all Az modules are present are set
      * If azPSVersion is not empty, folder path of exact Az module version is set
      */
-    static setPSModulePath(azPSVersion: string = "") {
-        let modulePath: string = "";
+    static async setPSModulePath(azPSVersion: string = "") {
+        let output: string = "";
+        const options: any = {
+            listeners: {
+                stdout: (data: Buffer) => {
+                    output += data.toString();
+                }
+            }
+        };
+        await PowerShellToolRunner.executePowerShellScriptBlock("$env:PSModulePath", options);
+        const defaultPSModulePath = output.trim();
+
         const runner: string = process.env.RUNNER_OS || os.type();
-        switch (runner.toLowerCase()) {
+        let defaultAzInstallFolder:string = Utils.getDefaultAzInstallFolder(runner.toLowerCase());
+        let modulePath: string = path.join(defaultAzInstallFolder, `${azPSVersion}`);
+        process.env.PSModulePath = `${modulePath}${path.delimiter}${defaultPSModulePath}`;
+    }
+
+    static getDefaultAzInstallFolder(os:string): string{
+        let defaultAzInstallFolder = "";
+        switch (os) {
             case "linux":
-                modulePath = `/usr/share/${azPSVersion}:`;
+                defaultAzInstallFolder = "/usr/share";
                 break;
             case "windows":
             case "windows_nt":
-                modulePath = `C:\\Modules\\${azPSVersion};`;
+                defaultAzInstallFolder = "C:\\Modules";
                 break;
             case "macos":
             case "darwin":
-                throw new Error(`OS not supported`);
             default:
-                throw new Error(`Unknown os: ${runner.toLowerCase()}`);
+                defaultAzInstallFolder = "";
+                break;
         }
-        process.env.PSModulePath = `${modulePath}${process.env.PSModulePath}`;
+
+        if(Utils.isFolderExistAndWritable(defaultAzInstallFolder)){
+            return defaultAzInstallFolder;
+        }
+        if(Utils.isFolderExistAndWritable(process.env.RUNNER_TOOL_CACHE)){
+            return process.env.RUNNER_TOOL_CACHE;
+        }
+        return process.cwd();
+    }
+
+    static isFolderExistAndWritable(folderPath:string) : boolean{
+        if(!folderPath){
+            return false;
+        }
+        if (!fs.existsSync(folderPath)) {
+            return false;
+        }
+        if (!fs.lstatSync(folderPath).isDirectory() ) {
+            return false;
+        }
+        try {
+            fs.accessSync(folderPath, fs.constants.W_OK)
+        } catch (err) {
+            return false;
+        }
+        return true;
     }
 
     static async getLatestModule(moduleName: string): Promise<string> {
@@ -40,7 +84,6 @@ export default class Utils {
                 }
             }
         };
-        await PowerShellToolRunner.init();
         await PowerShellToolRunner.executePowerShellScriptBlock(new ScriptBuilder()
                                 .getLatestModuleScript(moduleName), options);
         const outputJson = JSON.parse(output.trim());
@@ -66,7 +109,6 @@ export default class Utils {
         if (!Utils.isValidVersion(output.trim())) {
             return "";
         }
-        await PowerShellToolRunner.init();
         await PowerShellToolRunner.executePowerShellCommand(new ScriptBuilder()
                                     .checkModuleVersionScript(moduleName, version), options);
         const outputJson = JSON.parse(output.trim());
@@ -93,7 +135,6 @@ export default class Utils {
                 }
             }
         };
-        await PowerShellToolRunner.init();
         await PowerShellToolRunner.executePowerShellCommand(script, options);
         return output.trim().toLowerCase() === "true";
     }
@@ -111,7 +152,6 @@ export default class Utils {
             $ProgressPreference = 'SilentlyContinue'
             Save-Module -Path ${modulePath} -Name Az -RequiredVersion ${version} -Force -ErrorAction Stop
             $ProgressPreference = $prevProgressPref`;
-        await PowerShellToolRunner.init();
         const exitCode = await PowerShellToolRunner.executePowerShellScriptBlock(script);
         if (exitCode != 0) {
             throw new Error(`Download from PSGallery failed for Az ${version} to ${modulePath}`);

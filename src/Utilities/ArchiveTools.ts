@@ -34,7 +34,6 @@ export class ArchiveTools {
             $ProgressPreference = 'SilentlyContinue'
             Expand-Archive -Path ${zipPath} -DestinationPath ${destination}
             $ProgressPreference = $prevProgressPref`;
-        await PowerShellToolRunner.init();
         const exitCode = await PowerShellToolRunner.executePowerShellScriptBlock(script);
         if (exitCode != 0) {
             throw new Error(`Extraction using Expand-Archive cmdlet failed from ${zipPath} to ${destination}`);
