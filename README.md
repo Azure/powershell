@@ -55,7 +55,7 @@ Additionally the action supports two optional parameters:
 - `errorActionPreference` : select a suitable  value for the variable for executing the script. Allowed values are `stop`, `continue`, `silentlyContinue`. Default is `Stop`.
 - `failOnStandardError` : By default this is marked as `false`. But if this is marked as `true`, the action will fail if any errors are written to the error pipeline, or if any data is written to the Standard Error stream.
 
-#### Sample workflow to run a script file in your repository
+### Sample workflow to run a script file in your repository
 
 ```yaml
 # File: ./scripts/run_azps_cmdlets.ps1
@@ -123,9 +123,11 @@ or
           azPSVersion: "latest"
 ```
 
-#### Available versions of Az Module on runner
+## Available versions of Az Module on runner
 
 To use the latest Az module version, specify `latest`. You can find the latest Az module versions on different runner images from this [table](https://github.com/actions/runner-images#available-images).
+
+Or you can find all supported `Az` version on [PowerShell Gallery](https://www.powershellgallery.com/packages/Az).
 
 ## Getting Help for Azure PowerShell Issues
 
