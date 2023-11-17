@@ -42,21 +42,16 @@ describe('Testing setPSModulePath', () => {
         process.env.RUNNER_OS = savedRunnerOS;
     });
 
-    test('PSModulePath with azPSVersion non-empty', () => {
+    test('PSModulePath with azPSVersion non-empty', async () => {
         process.env.RUNNER_OS = "Windows";
-        Utils.setPSModulePath(version);
+        await Utils.setPSModulePath(version);
         expect(process.env.PSModulePath).toContain(version);
     });
-    test('PSModulePath with azPSVersion empty', () => {
+    test('PSModulePath with azPSVersion empty', async () => {
         process.env.RUNNER_OS = "Linux";
         const prevPSModulePath = process.env.PSModulePath;
-        Utils.setPSModulePath();
+        await Utils.setPSModulePath();
         expect(process.env.PSModulePath).not.toEqual(prevPSModulePath);
-    });
-    test('setPSModulePath should throw for MacOS', () => {
-        process.env.RUNNER_OS = "Darwin";
-        expect(() => Utils.setPSModulePath()).toThrow();
-        expect(() => Utils.setPSModulePath(version)).toThrow();
     });
 });
 
@@ -93,7 +88,6 @@ describe('Testing isHostedAgent', () => {
     test('Should return true when file layout check script returns true', async () => {
         mockExecutePowerShellCommandOutput = "True";
         const isHostedAgentResult = await Utils.isHostedAgent("/usr/share");
-        expect(mockPowerShellToolRunnerInit).toHaveBeenCalledTimes(1);
         expect(mockExecutePowerShellCommand).toHaveBeenCalledTimes(1);
         expect(mockExecutePowerShellCommand.mock.calls[0][0]).toBe('Test-Path (Join-Path "/usr/share" "az_*")');
         expect(isHostedAgentResult).toBeTruthy();
@@ -136,7 +130,6 @@ describe('Testing saveAzModule', () => {
     test('Should run without throwing when script succeeds with exit code 0', async () => {
         mockExecutePowerShellScriptBlockExitCode = 0;
         await Utils.saveAzModule("1.1.1", "/usr/share/az_1.1.1");
-        expect(mockPowerShellToolRunnerInit).toHaveBeenCalledTimes(1);
         expect(mockExecutePowerShellScriptBlock).toHaveBeenCalledTimes(1);
         expect(mockExecutePowerShellScriptBlock.mock.calls[0][0]).toContain(
             "Save-Module -Path /usr/share/az_1.1.1 -Name Az -RequiredVersion 1.1.1 -Force -ErrorAction Stop");

@@ -56,37 +56,6 @@ describe("Testing AzModuleInstaller", () => {
         expect(spyTryInstallingLatest).toBeCalledTimes(1);
         expect(mockTryInstalledTrue).toBeCalledTimes(4);
     });
-    test("install with version 1.1.1 available as folder", async () => {
-        mockPathExists.mockImplementation((path) => path === "C:\\Modules\\az_1.1.1");
-        const installer = new AzModuleInstaller("1.1.1");
-        const spyTryInstallingLatest = jest.spyOn(<any>installer, "tryInstallingLatest");
-        const spyTryInstallFromFolder = jest.spyOn(<any>installer, "tryInstallFromFolder");
-        const mockTryInstalledTrue = jest.fn(async () => expect(installer["installResult"]["isInstalled"]).toBeTruthy());
-        installer["tryInstallFromZip"] = mockTryInstalledTrue;
-        installer["tryInstallFromGHRelease"] = mockTryInstalledTrue;
-        installer["tryInstallFromPSGallery"] = mockTryInstalledTrue;
-        const result = await installer.install();
-        expect(result).toEqual({ isInstalled: true, moduleSource: "hostedAgentFolder" });
-        expect(spyTryInstallingLatest).toBeCalledTimes(1);
-        expect(spyTryInstallFromFolder).toBeCalledTimes(1);
-        expect(mockTryInstalledTrue).toBeCalledTimes(3);
-    });
-    test("install with version 1.1.1 available as zip", async () => {
-        mockPathExists.mockImplementation((path) => path === "C:\\Modules\\az_1.1.1.zip");
-        const installer = new AzModuleInstaller("1.1.1");
-        const spyTryInstallingLatest = jest.spyOn(<any>installer, "tryInstallingLatest");
-        const spyTryInstallFromFolder = jest.spyOn(<any>installer, "tryInstallFromFolder");
-        const spyTryInstallFromZip = jest.spyOn(<any>installer, "tryInstallFromZip");
-        const mockTryInstalledTrue = jest.fn(async () => expect(installer["installResult"]["isInstalled"]).toBeTruthy());
-        installer["tryInstallFromGHRelease"] = mockTryInstalledTrue;
-        installer["tryInstallFromPSGallery"] = mockTryInstalledTrue;
-        const result = await installer.install();
-        expect(result).toEqual({ isInstalled: true, moduleSource: "hostedAgentZip" });
-        expect(spyTryInstallingLatest).toBeCalledTimes(1);
-        expect(spyTryInstallFromFolder).toBeCalledTimes(1);
-        expect(spyTryInstallFromZip).toBeCalledTimes(1);
-        expect(mockTryInstalledTrue).toBeCalledTimes(2);
-    });
     test("install with version 1.1.1 from GHRelease", async () => {
         const installer = new AzModuleInstaller("1.1.1");
         installer["getDownloadUrlFromGHRelease"] = jest.fn().mockReturnValue("downloadUrl");

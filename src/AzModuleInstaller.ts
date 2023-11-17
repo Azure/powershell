@@ -4,6 +4,8 @@ import * as os from 'os';
 import { ArchiveTools } from './Utilities/ArchiveTools';
 import FileUtils from './Utilities/FileUtils';
 import Utils from './Utilities/Utils';
+import path from 'path';
+import Constants from './Constants';
 
 export interface InstallResult {
     moduleSource: string;
@@ -36,20 +38,11 @@ export class AzModuleInstaller {
         };
         const platform = (process.env.RUNNER_OS || os.type())?.toLowerCase();
         core.debug(`Platform: ${platform}`);
-        switch(platform) {
-            case "windows":
-            case "windows_nt":
-                this.isWin = true;
-                this.moduleRoot = "C:\\Modules";
-                this.modulePath = `${this.moduleRoot}\\az_${this.version}`
-                break;
-            case "linux":
-                this.moduleRoot = "/usr/share";
-                this.modulePath = `${this.moduleRoot}/az_${this.version}`
-                break;
-            default:
-                throw `OS ${platform} not supported`;
+        this.moduleRoot = Utils.getDefaultAzInstallFolder(platform);
+        if(platform == "windows" || platform == "windows_nt"){
+            this.isWin = true;
         }
+        this.modulePath = path.join(this.moduleRoot, `${Constants.prefix}${this.version}`);
         this.moduleZipPath = `${this.modulePath}.zip`;
     }
 
@@ -137,7 +130,7 @@ export class AzModuleInstaller {
             };
         } catch (err) {
             core.debug(err);
-            console.log("Download from GHRelease failed, will fallback to PSGallery");
+            core.info("Download from GHRelease failed, will fallback to PSGallery");
         }
     }
 
