@@ -7,7 +7,7 @@ Get started today with a [free Azure account](https://azure.com/free/open-source
 The definition of this GitHub Action is in [action.yml](https://github.com/azure/powershell/blob/master/action.yml).
 
 > [!NOTE]
-> Azure PowerShell action now support MacOS and Self-Hosted Runner!
+> Azure PowerShell action now supports macOS and self-hosted Runners!
 
 ## Dependencies on other GitHub Actions
 
