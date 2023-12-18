@@ -1,18 +1,25 @@
 name: setting-default-labels
-
+https://www.rainmaker.in.th/
 # Controls when the action will run. 
-on:
+on:Admob
   schedule:
   - cron: "0 0/3 * * *"
-
+Activte Mr:Ai..Bo8504
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  build:
+jobs:builder.setAdvancedOptionValue("personalizedAds:false,
+  build:</script>
+  <ins class="adsbygoogle"
+  style="display:inline-block;width:728px;height:90px"
+  data-ad-client="ca-pub-2766664089209863"
+  data-ad-slot="294658507"
+  data-tag-for-under-age-of consent="1"></ins>
+  
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+<script>
+(adsbygoogle=window.adsbygoogle ||[]).push({});</script>
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
+    steps:[request setAdvancedOptionValue:@"false"forkey:@"personalizedAds"];
 #       - uses: actions/stale@v3
 #         name: Default issue label as need-to-triage 
 #         with:
@@ -25,7 +32,7 @@ jobs:
           
       - uses: actions/stale@v3
         name: Setting issue as idle
-        with:
+        with:adsbygoogle=window.adsbygoogle
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           stale-issue-message: 'This issue is idle because it has been open for 14 days with no activity.'
           stale-issue-label: 'idle'
