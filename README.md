@@ -33,13 +33,13 @@ jobs:
     steps:
     
     - name: Login via Az module
-      uses: azure/login@v1
+      uses: azure/login@v2
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
         enable-AzPSSession: true 
         
     - name: Run Azure PowerShell inline script
-      uses: azure/powershell@v1
+      uses: azure/powershell@v2
       with:
         inlineScript: |
           Get-AzVM -ResourceGroupName "ResourceGroup11"
@@ -73,13 +73,13 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Login Azure
-      uses: azure/login@v1
+      uses: azure/login@v2
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
         enable-AzPSSession: true 
 
     - name: Run Azure PowerShell Script File
-      uses: azure/powershell@v1
+      uses: azure/powershell@v2
       with:
         inlineScript: ./scripts/run_azps_cmdlets.ps1
         azPSVersion: "latest"
@@ -90,7 +90,7 @@ You can also run the script file with parameters. For example:
 
 ```yaml
     - name: Run Azure PowerShell Script File
-      uses: azure/powershell@v1
+      uses: azure/powershell@v2
       with:
         inlineScript: ./scripts/run_azps_cmdlets.ps1 myresourcegroup myresourcename
         azPSVersion: "latest"
@@ -100,7 +100,7 @@ or
 
 ```yaml
     - name: Run Azure PowerShell Script File
-      uses: azure/powershell@v1
+      uses: azure/powershell@v2
       with:
         inlineScript: ./scripts/run_azps_cmdlets.ps1 -ResourceGroupName myresourcegroup -ResourceName myresourcename
         azPSVersion: "latest"
@@ -110,14 +110,14 @@ or
 
 ```yaml
    - name: Login to Azure US Gov Cloud with Az Powershell 
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_US_GOV_CREDENTIALS }}
           environment: 'AzureUSGovernment'
           enable-AzPSSession: true
     
       - name: Run powershell command in US Gov Cloud
-        uses: azure/powershell@v1
+        uses: azure/powershell@v2
         with:
           inlineScript: "Get-AzContext"
           azPSVersion: "latest"
