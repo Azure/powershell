@@ -23,5 +23,5 @@ branding:
   icon: 'log-in'
   color: 'blue'
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'lib/main.js'
