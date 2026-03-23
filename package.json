@@ -2,9 +2,9 @@
   "name": "powershell",
   "version": "3.0.0",
   "description": "",
-  "main": "lib/main/index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "build": "ncc build src/main.ts -o lib/main",
+    "build": "ncc build src/main.ts -o lib",
     "test": "jest"
   },
   "repository": {
