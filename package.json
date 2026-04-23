@@ -19,15 +19,15 @@
   },
   "homepage": "https://github.com/Azure/powershell#readme",
   "dependencies": {
-    "@actions/core": "1.9.1",
+    "@actions/core": "1.11.1",
     "@actions/exec": "^1.0.3",
     "@actions/io": "^1.0.2",
-    "@actions/tool-cache": "^1.6.1",
+    "@actions/tool-cache": "^4.0.0",
     "fs": "0.0.1-security",
     "os": "^0.1.1",
     "path": "^0.12.7",
     "stream": "0.0.2",
-    "uuid": "^7.0.2"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@types/jest": "^29.2.4",
